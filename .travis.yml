@@ -1,0 +1,34 @@
+sudo: required
+
+services:
+  - docker
+
+env:
+  global:
+    - secure: "N+gP8S0CfFzHPfJ+y5hvTAuetuCoflBnORLkBEqU6ZIB86G4bvCGmUCqqgXDBXQArvn8Z71dPjWn5P4/vNd7vDR0oN/kyABA5GW02qY5tIZ5q4sTjwnIDEnpCb47RtJJMQ83i8cj7Gdugd84YUnvLVsW9bO0sVDKYn5CY5olf9X7FK2Jpf4neGsRxnyYWXU5VNp112/Xio6e6OYnnFOOVsZsxbqo/0548uEB2ud1G//ihUFArbzSvQqKrghAOuTOfK2+FEw7RutRLxm1qIsFcokHHLDhpkeB9fE8ZRV3KCU4xwEl942/oKNLEDLZyxgtxnJAQVVR7g0MNTgerJt6fvKdQIMRI7Ndo1tM9oPAN9DvC1ZpY49Fq5qpO55Xo5QhjKxpajybZ5RRAXjaOzGn9nvIz03IvSszrrlmA518p4NIfCfPAlYM9AgLG9O7J6npUelzWjurHIiHuDYyzMl8heLjXHVnyE5ZYxcqLLjM2stcM2ycVRgYS7F5mvsrFU4kU5Gxqd1DgW6isUPzrZjKBwhEsKA2wgvwkNbkhT4KIgWk1M8+ocn6bNsKVgy+0MHX2N+orrCh+0PTHf8c/b+tuKs+fB4PdKRMxs4gCbKAOz5LaUaaC1uzkLDo6qCMNLZ2bvV3jlGuH4MD/zwsFfh7alPlOE9dUmZciqkf6GkYLWc="
+    - secure: "ejEedY6b+3Wj4ETjAzGVjRaaboRijoZdR67j9xUYMOMT52+9rG9UBX8uOqNm/qKkBIvkSnDXCXTXNEvv4fBiR/oPZOHda2GajRnV2ZDfRGf1EcQCEMkKsfjZ0+MQA4uLuFtrqH8k64PC1vQZOMnLhmxsS+R3a4HZhYeiz/GZe8NbCq7Rb9mMdtayzVczo4ZvcAVjo8h9R+Focu+gSKW5CdnmnzVkIMT7pSmP8Mku/u2ys6iqBqvH1+WumHN06XfN0X917RkM7pCOKt6rEwBjv1FlT+i2ev541DWMQMJT4cBqz8Lz6ixg6N0LgfwGQS3KrR+LUxE7/4r34gNbRqg1AAzpxZfrWGJUvgMw8G20IF100arXgIfWl15oh8LJS9JtQ5yGhi0pCmvvCVBr8RMYTB1a1lqmL8/xm92IakJfBZlKXZotQSzIhSxTyZ5ihADE7ZSEG9ADUErbzqHx3PmVe4lkCxho53luCtHaVvg/lhiWJpzpbO7JGQpMgajs9ooql0CW5BZtqLAW3zKZtZBsrnCvDWrt8UxUFAXc3GnjA6jEM+UrfgetLtwkn/LMm91R0t9zTBrPUw/lLXk3AffMqQKqZRmAXh6Zsvfv5heVH8ohe+M+hIrtcHvUPBSgsX2IEjGljFIDzUwBXGvLPlfwRa65kPa9al7O8rKwedZI4LQ="
+    - secure: "cc+AR9gyI4nCtCgYY4XizAvM48Osq+aYS+t71/Kp/Cp7g5Om7iD0OCGNqevpLnlfT08xH7/fxmLOaenu1BPIIPb+7fda2GoBNorakw1qxH0Rq5JADmOW0vDi92HGLliuBY2gcOGnTtO5XpMCZb33qIniLfngLd5odhdL7X8E5kZWD9Rt6rE5GEjSX7Xm5FVyrvpjfGpqcgTo6atrG0VkOpFZfrOIeMTJ9+SXh1b78sEYSzJIRUj2EiqdICB1/DQPuoAaQbAOHNLKHv12FtYCsKoP84gXpbdbQiXn9+QjHM7oKXEN8VzmGbruLmNMmac6p9lbeZx4pigk59poYHeLgHkRApUtcqTjrY8skhIT0vG0GrHa17sOHhWPMzTlkH2iUWPglWB7d3rYPWMP5iSDqHcE/kVwbzhSLO4fhVc+LxkNdUETPAzJY/t22p4ip0lLjCzWTO/oOBCAR0CdhBCIdAFtJQbjFBVCiO+q5iJNXWDHOQeah6Y9wxx2WpkShOKCiJwfWa8xRBC+BbK0gC4Ppgq/lyJgj/feVwwCTqK0HT+eMESiuGfVSQhe0HItqpKuE87rsbES0PEyPbbBtI3JJjYLlQZFaQT+n08T5dFdgiesriqfuEftlugso1bfo8QXiuTtsFbvJdtY0uUaOOD4X/HFz7w8iLMSvVv3Y0lumtA="
+    - COMMIT=${TRAVIS_COMMIT::8}
+
+addons:
+  sonarqube:
+    token:
+      secure: "23adb805621bc47d08295f58b1364b1509d6814d"
+
+language: java
+
+install:
+  - echo "nothing to install"
+
+script:
+  - echo "no tests!"
+
+# command to build docker and push to repository
+after_success:
+  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+  - export REPO=drewboswell/converge
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+  - docker build -f Dockerfile -t $REPO:$COMMIT .
+  - docker tag $REPO:$COMMIT $REPO:$TAG
+  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+  - docker push $REPO

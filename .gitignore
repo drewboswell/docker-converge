@@ -23,6 +23,7 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+tests/resources/generated_by_tests
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -44,6 +45,7 @@ nosetests.xml
 coverage.xml
 *,cover
 .hypothesis/
+pylint-report.txt
 
 # Translations
 *.mo
@@ -87,3 +89,7 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# idea
+.idea
+/tests/resources/repository/output/*
