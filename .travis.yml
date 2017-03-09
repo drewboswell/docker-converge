@@ -1,5 +1,7 @@
 sudo: required
 
+language: java
+
 services:
   - docker
 
@@ -10,25 +12,24 @@ env:
     - secure: "cc+AR9gyI4nCtCgYY4XizAvM48Osq+aYS+t71/Kp/Cp7g5Om7iD0OCGNqevpLnlfT08xH7/fxmLOaenu1BPIIPb+7fda2GoBNorakw1qxH0Rq5JADmOW0vDi92HGLliuBY2gcOGnTtO5XpMCZb33qIniLfngLd5odhdL7X8E5kZWD9Rt6rE5GEjSX7Xm5FVyrvpjfGpqcgTo6atrG0VkOpFZfrOIeMTJ9+SXh1b78sEYSzJIRUj2EiqdICB1/DQPuoAaQbAOHNLKHv12FtYCsKoP84gXpbdbQiXn9+QjHM7oKXEN8VzmGbruLmNMmac6p9lbeZx4pigk59poYHeLgHkRApUtcqTjrY8skhIT0vG0GrHa17sOHhWPMzTlkH2iUWPglWB7d3rYPWMP5iSDqHcE/kVwbzhSLO4fhVc+LxkNdUETPAzJY/t22p4ip0lLjCzWTO/oOBCAR0CdhBCIdAFtJQbjFBVCiO+q5iJNXWDHOQeah6Y9wxx2WpkShOKCiJwfWa8xRBC+BbK0gC4Ppgq/lyJgj/feVwwCTqK0HT+eMESiuGfVSQhe0HItqpKuE87rsbES0PEyPbbBtI3JJjYLlQZFaQT+n08T5dFdgiesriqfuEftlugso1bfo8QXiuTtsFbvJdtY0uUaOOD4X/HFz7w8iLMSvVv3Y0lumtA="
     - COMMIT=${TRAVIS_COMMIT::8}
 
-addons:
-  sonarqube:
-    token:
-      secure: "23adb805621bc47d08295f58b1364b1509d6814d"
-
-language: java
-
 install:
   - echo "nothing to install"
 
 script:
   - echo "no tests!"
 
-# command to build docker and push to repository
-after_success:
-  - docker login -u"$DOCKER_USER" -p"$DOCKER_PASS"
-  - export REPO=drewboswell/converge
-  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+before_install:
   - docker build -f Dockerfile -t $REPO:$COMMIT .
   - docker tag $REPO:$COMMIT $REPO:$TAG
   - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+# command to build docker and push to repository
+after_success:
+  - export REPO=drewboswell/converge
+  - docker login -u="$DOCKER_USER" -p="$DOCKER_PASS"
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
   - docker push $REPO
+
+addons:
+  sonarqube:
+    token:
+      secure: "23adb805621bc47d08295f58b1364b1509d6814d"
