@@ -1,3 +1,3 @@
-FROM ubuntu:latest
-RUN apt-get update
-CMD service apache2 start && tail -f /dev/null
+FROM python:3.6
+RUN pip install pyconverge
+CMD ["converge"]
